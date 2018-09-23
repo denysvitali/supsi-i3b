@@ -1,11 +1,10 @@
 package ch.supsi.webapp.server;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Date;
 
 public class Server {
@@ -34,9 +33,14 @@ public class Server {
 			OutputStream out = socket.getOutputStream();
 
 			Request request = readRequest(in);
+			if (request == null) {
+				return;
+			}
+
 			System.out.println(request.allRequest);
-			
+
 			Content responseBody = handleResponseContent(request);
+
 			produceResponse(out, responseBody);
 
 			out.flush();
@@ -63,13 +67,13 @@ public class Server {
 		String resource = line.substring(line.indexOf(' ')+1, line.lastIndexOf(' '));
 		int contentLength = 0;
 		while (!(line = input.readLine()).equals("")) {
-			rawRequest.append('\n' + line);
+			rawRequest.append('\n').append(line);
 			if (line.startsWith(CONTENT_LENGTH_HEADER))
 				contentLength = Integer.parseInt(line.substring(CONTENT_LENGTH_HEADER.length()+2));
 		}
 		String body = "";
 		if (isPost) {
-			rawRequest.append("\n\n" + getBody(input, contentLength));
+			rawRequest.append("\n\n").append(getBody(input, contentLength));
 		}
 		return new Request(rawRequest.toString(), resource, body, isPost);
 	}
@@ -87,7 +91,30 @@ public class Server {
 	 * 
 	 */
 	private static Content handleResponseContent(Request request) {
-		return new Content("Il corpo della riposta va qui".getBytes());
+
+		if(request.resource.equals("/prova.html")){
+			try {
+				byte[] bytes = Files.readAllBytes(Paths.get("/tmp/prova.html"));
+				return new Content(bytes);
+			} catch (IOException e) {
+				e.printStackTrace();
+				return new Content("404 - Page not Found".getBytes(), 404);
+
+			}
+		} else if(request.resource.equals("/")){
+			String currentTime = new Date().toString();
+			return new Content(("<!DOCTYPE html>" +
+					"<html>" +
+					"<head>" +
+					"<title>Main Page</title>" +
+					"</head><body>" +
+					"<h1>Welcome</h1>" +
+					"<p>It's " + currentTime + "</p>" +
+					"</body>" +
+					"</html>").getBytes());
+		}
+
+		return new Content("File not found".getBytes(), 404);
 	}
 
 	/*
@@ -97,7 +124,19 @@ public class Server {
 	private static void produceResponse(OutputStream output, Content responseContent) throws IOException 
 	{
 		// usare la variabile LINEBREAK per andare a capo
-		output.write("HTTP/1.1 200 OK\r\n".getBytes());
+
+		switch(responseContent.code){
+			case 200:
+				output.write("HTTP/1.1 200 OK\r\n".getBytes());
+			case 404:
+				output.write("HTTP/1.1 404 Not Found\r\n".getBytes());
+			case 418:
+				output.write("HTTP/1.1 418 I'm a teapot\r\n".getBytes());
+			default:
+				output.write("HTTP/1.1 500 Internal Server Error\r\n".getBytes());
+		}
+
+
 		output.write(String.format("Content-Length: %d\r\n", responseContent.length).getBytes());
 		output.write(String.format("Content-Type: text/html\r\n\r\n").getBytes());
 		output.write(new String(responseContent.content).getBytes());
