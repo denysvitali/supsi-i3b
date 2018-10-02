@@ -1,3 +1,4 @@
 .idea
 *.class
+.ipynb_checkpoints/
 META-INF
