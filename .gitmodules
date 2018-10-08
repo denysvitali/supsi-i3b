@@ -4,3 +4,6 @@
 [submodule "5-sem/os/prj"]
 	path = 5-sem/os/prj
 	url = https://git.ded1.denv.it/shrug/bthread
+[submodule "5-sem/compint/my-compiler"]
+	path = 5-sem/compint/my-compiler
+	url = ssh://git@git.ded1.denv.it:4000/dvitali/supsi-compint-my-compiler.git
