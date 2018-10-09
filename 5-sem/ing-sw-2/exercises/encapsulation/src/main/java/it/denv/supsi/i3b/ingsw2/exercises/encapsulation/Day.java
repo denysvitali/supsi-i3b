@@ -1,6 +1,7 @@
 package it.denv.supsi.i3b.ingsw2.exercises.encapsulation;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class Day {
 
@@ -16,6 +17,13 @@ public class Day {
 
 	private Day(Calendar c){
 		this.c = c;
+	}
+
+	public static int daysTillEndOfYear(){
+		Calendar c = new GregorianCalendar();
+		Day now = new Day(c);
+		Day endOfYear = new Day(now.getYear(), 11, 31);
+		return now.daysTo(endOfYear);
 	}
 
 	public int getYear(){

@@ -3,6 +3,7 @@ package it.denv.supsi.i3b.ingsw2.exercises.encapsulation;
 import org.junit.Test;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import static org.junit.Assert.*;
 
@@ -38,5 +39,23 @@ public class DayTest {
 		Day d2 = d.dayAfter(daysTo);
 
 		assertEquals(daysTo, d.daysTo(d2));
+	}
+
+	@Test
+	public void daysTillEndOfYear(){
+		Calendar c = new GregorianCalendar();
+		Calendar c2 = new Calendar.Builder().setDate(
+				c.get(Calendar.YEAR),
+				11,
+				31
+		).build();
+
+		int daysEoy = (int) Math.round(
+				(c2.getTimeInMillis() - c.getTimeInMillis()) /
+						(1000.0 * 60 * 60 * 24)
+		);
+
+		System.out.println("Days till the end of year: " + daysEoy);
+		assertEquals(daysEoy, Day.daysTillEndOfYear());
 	}
 }
