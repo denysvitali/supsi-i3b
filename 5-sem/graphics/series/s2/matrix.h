@@ -13,11 +13,14 @@ public:
     Matrix(unsigned long rows, unsigned long columns);
     std::vector<double*> operator[] (int v);
     Matrix operator + (const Matrix& m);
+    Matrix operator * (const Matrix& m);
 
     unsigned long getRows() const;
     unsigned long getColumns() const;
 
     double get(int i, int j) const;
+
+    Matrix transpose() const;
 
     friend std::ostream& operator << (std::ostream& os, const Matrix& m);
 private:
