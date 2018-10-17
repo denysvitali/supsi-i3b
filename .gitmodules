@@ -7,3 +7,6 @@
 [submodule "5-sem/compint/my-compiler"]
 	path = 5-sem/compint/my-compiler
 	url = ssh://git@git.ded1.denv.it:4000/dvitali/supsi-compint-my-compiler.git
+[submodule "5-sem/app-web-1/prpra-1"]
+	path = 5-sem/app-web-1/prpra-1
+	url = http://isin03.dti.supsi.ch/I3-18-19/vitali.git
