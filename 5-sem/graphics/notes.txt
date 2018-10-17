@@ -1,0 +1,20 @@
+OpenGL usa le colonne
+
+- Origin Coordinates, World Coordinates, Eye Coordinates
+- Clip Coordinates = Projection Matrix * Eye Coordinates
+
+Matrici di proiezioni:
+Ortografica / Ortogonale o Prospettica
+
+Ortogonale: Utile per visualizzare grafici a tre dimensioni (non rimpiccioliscono con la distanza). Nessun effetto prospettico. Le dimensioni restano uguali in qualsiasi punto
+
+Dalle clip coordinates in avanti, la Z è invertita
+
+
+Perspective Matrix
+
+Quasi mai si usano le clip coordinates, si usano le normalized device coordinates
+
+Le Clip Coordinates sono uno stadio intermedio perché non possiamo passare da una 4x4 ad una 3x3
+Sono la "preparazione" per la operazione successiva. Hanno senso solo in funzione dell'operazione che viene dopo,
+ossia la divisione per w.
