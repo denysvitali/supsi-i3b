@@ -19,9 +19,8 @@ public class Day {
 		this.c = c;
 	}
 
-	public static int daysTillEndOfYear(){
-		Calendar c = new GregorianCalendar();
-		Day now = new Day(c);
+	public int daysTillEndOfYear(){
+		Day now = this;
 		Day endOfYear = new Day(now.getYear(), 11, 31);
 		return now.daysTo(endOfYear);
 	}
