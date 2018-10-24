@@ -70,7 +70,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/usr/bin/cmake-gui -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -122,6 +122,19 @@ s2: cmake_check_build_system
 s2/fast:
 	$(MAKE) -f CMakeFiles/s2.dir/build.make CMakeFiles/s2.dir/build
 .PHONY : s2/fast
+
+#=============================================================================
+# Target rules for targets named s2_glm
+
+# Build rule for target.
+s2_glm: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 s2_glm
+.PHONY : s2_glm
+
+# fast build rule for target.
+s2_glm/fast:
+	$(MAKE) -f CMakeFiles/s2_glm.dir/build.make CMakeFiles/s2_glm.dir/build
+.PHONY : s2_glm/fast
 
 main.o: main.cpp.o
 
@@ -177,6 +190,33 @@ matrix.cpp.s:
 	$(MAKE) -f CMakeFiles/s2.dir/build.make CMakeFiles/s2.dir/matrix.cpp.s
 .PHONY : matrix.cpp.s
 
+s2_glm.o: s2_glm.cpp.o
+
+.PHONY : s2_glm.o
+
+# target to build an object file
+s2_glm.cpp.o:
+	$(MAKE) -f CMakeFiles/s2_glm.dir/build.make CMakeFiles/s2_glm.dir/s2_glm.cpp.o
+.PHONY : s2_glm.cpp.o
+
+s2_glm.i: s2_glm.cpp.i
+
+.PHONY : s2_glm.i
+
+# target to preprocess a source file
+s2_glm.cpp.i:
+	$(MAKE) -f CMakeFiles/s2_glm.dir/build.make CMakeFiles/s2_glm.dir/s2_glm.cpp.i
+.PHONY : s2_glm.cpp.i
+
+s2_glm.s: s2_glm.cpp.s
+
+.PHONY : s2_glm.s
+
+# target to generate assembly for a file
+s2_glm.cpp.s:
+	$(MAKE) -f CMakeFiles/s2_glm.dir/build.make CMakeFiles/s2_glm.dir/s2_glm.cpp.s
+.PHONY : s2_glm.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -184,14 +224,18 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... s2"
 	@echo "... edit_cache"
+	@echo "... s2"
+	@echo "... s2_glm"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
 	@echo "... matrix.o"
 	@echo "... matrix.i"
 	@echo "... matrix.s"
+	@echo "... s2_glm.o"
+	@echo "... s2_glm.i"
+	@echo "... s2_glm.s"
 .PHONY : help
 
 
