@@ -24,7 +24,47 @@
 // C/C++:
 #include <iostream>
 
+#include "point.h"
 
+struct RGBColor {
+    float r;
+    float g;
+    float b;
+};
+
+bool isHex(char c){
+    return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f');
+}
+
+RGBColor getColor(char* color){
+    int hexLen = static_cast<int>(strlen("#ffffff"));
+    RGBColor rgbColor = RGBColor{};
+    if(color[0] == '#') {
+        if (strlen(color) == hexLen) {
+            // RGB Hex Color
+            for (int i = 1; i < hexLen; i++) {
+                if (!isHex(color[i])) {
+                    return rgbColor;
+                }
+            }
+
+            char *output = new char[hexLen + 1];
+            sprintf(output, "0x%s", color + 1);
+
+            int num = (int) strtol(output, nullptr, 0);
+
+            float r = static_cast<float>((num >> 16 & 0xFF) / 255.0);
+            float g = static_cast<float>(((num >> 8) & 0xFF) / 255.0);
+            float b = static_cast<float>(((num) & 0xFF) / 255.0);
+
+            rgbColor.r = r;
+            rgbColor.g = g;
+            rgbColor.b = b;
+        }
+    }
+
+    return rgbColor;
+}
 
 /////////////
 // GLOBALS //
@@ -35,27 +75,137 @@ float angle = 0.0f;
 float angleX = 0.0f;
 float angleY = 0.0f;
 float angleZ = 0.0f;
+float cubeAngle = 0.0f;
 float distance = -45.0f;
 int windowId;
+bool wireFrame = false;
+
+void setColor(char* hex){
+    RGBColor color = getColor(hex);
+    glColor3f(color.r, color.g, color.b);
+}
+
+void colorOrange(){
+    glColor3f(95.0f/100, 31.4f/100, 13.3f/100);
+}
+
+void colorGreen(){
+    glColor3f(49.8f/100, 72.9f/100, 0.0f/100);
+}
+
+void colorBlue(){
+    glColor3f(0.0f/100, 64.3f/100, 93.7f/100);
+}
+
+void colorYellow(){
+    glColor3f(100.0f/100, 72.5f/100, 0.0f/100);
+}
+
+void colorGray(){
+    glColor3f(28.6f/100, 28.6f/100, 28.6f/100);
+}
+
+void colorRed(){
+    glColor3f(72.3f/100, 0.0f/100, 0.0f/100);
+}
+
+void drawCube(float width){
+    glBegin(GL_TRIANGLE_STRIP);
+    colorOrange();
+    glVertex3f(width/2, -width/2, width/2);
+    glVertex3f(-width/2, -width/2, width/2);
+    glVertex3f(width/2, width/2, width/2);
+    glVertex3f(-width/2, width/2, width/2);
+    glEnd();
+
+    glBegin(GL_TRIANGLE_STRIP);
+    colorGreen();
+    glVertex3f(width/2, -width/2, -width/2);
+    glVertex3f(-width/2, -width/2, -width/2);
+    glVertex3f(width/2, width/2, -width/2);
+    glVertex3f(-width/2, width/2, -width/2);
+    glEnd();
+
+    glBegin(GL_TRIANGLE_STRIP);
+    colorBlue();
+    glVertex3f(width/2, -width/2, -width/2);
+    glVertex3f(width/2, width/2, -width/2);
+    glVertex3f(width/2, -width/2, width/2);
+    glVertex3f(width/2, width/2, width/2);
+    glEnd();
+
+    glBegin(GL_TRIANGLE_STRIP);
+    colorYellow();
+    glVertex3f(-width/2, -width/2, -width/2);
+    glVertex3f(-width/2, width/2, -width/2);
+    glVertex3f(-width/2, -width/2, width/2);
+    glVertex3f(-width/2, width/2, width/2);
+    glEnd();
+
+    glBegin(GL_TRIANGLE_STRIP);
+    colorGray();
+    glVertex3f(-width/2, -width/2, -width/2);
+    glVertex3f(width/2, -width/2, -width/2);
+    glVertex3f(-width/2, -width/2, width/2);
+    glVertex3f(width/2, -width/2, width/2);
+    glEnd();
 
 
+    glBegin(GL_TRIANGLE_STRIP);
+    colorRed();
+    glVertex3f(-width/2, width/2, -width/2);
+    glVertex3f(width/2, width/2, -width/2);
+    glVertex3f(-width/2, width/2, width/2);
+    glVertex3f(width/2, width/2, width/2);
+    glEnd();
+}
 
-///////////////
-// CALLBACKS //
-///////////////
+void drawPlane(float width){
+    glBegin(GL_TRIANGLE_STRIP);
+    setColor("#8e44ad");
+    glVertex3f(width, 0, 0);
+    glVertex3f(0, 0, -width);
+    glVertex3f(0, 0, width);
+    glVertex3f(-width, 0, 0);
+    glEnd();
+}
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**
- * This is the main rendering routine automatically invoked by FreeGLUT.
- */
+void clearColor(char* color){
+    int hexLen = static_cast<int>(strlen("#ffffff"));
+    if(color[0] == '#') {
+        if (strlen(color) == hexLen) {
+            // RGB Hex Color
+            for(int i=1; i<hexLen; i++){
+                if(!isHex(color[i])){
+                    return;
+                }
+            }
+
+            char* output = new char[hexLen + 1];
+            sprintf(output, "0x%s", color+1);
+
+            int num = (int) strtol(output, nullptr, 0);
+
+            float r = static_cast<float>((num >> 16 & 0xFF) / 255.0);
+            float g = static_cast<float>(((num >> 8) & 0xFF) / 255.0);
+            float b = static_cast<float>(((num) & 0xFF) / 255.0);
+
+            glClearColor(r, g, b, 0.0f);
+        }
+    }
+}
+
 void displayCallback() {
-    angleZ += 0.2f;
-    angleY -= 0.2f;
+    cubeAngle += 0.2f;
 
-    // Clear the screen:
-    glClearColor(0.82f, 0.82f, 0.82f, 0.82f); // RGBA components
+    clearColor("#2980b9");
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
+    if (wireFrame) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    } else {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
 
     // Set a matrix to move our triangle:
     glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, distance));
@@ -63,61 +213,32 @@ void displayCallback() {
     glm::mat4 rotationY = glm::rotate(glm::mat4(1.0f), glm::radians(angleY), glm::vec3(0.0f, 1.0f, 0.0f));
     glm::mat4 rotationZ = glm::rotate(glm::mat4(1.0f), glm::radians(angleZ), glm::vec3(0.0f, 0.0f, 1.0f));
 
-    // Compute model matrix:
-    glm::mat4 f = translation * rotationX * rotationY * rotationY;
+    float pos = 0;
 
-    // Set model matrix as current OpenGL matrix:
+    for(int i=0; i<4; i++){
+        float cs = 4 - i;
+        Point center = {0.0f, pos, 0.0f};
+        pos += cs;
+
+
+        glm::mat4 cubePosition = glm::translate(glm::mat4(1.0f), glm::vec3(center.getX(), center.getY(), center.getZ()));
+        glm::mat4 cubeTranslation = glm::translate(glm::mat4(1.0f), glm::vec3(0, cs/2, 0));
+        glm::mat4 cubeSize = glm::scale(glm::mat4(1.0f), glm::vec3(cs, cs, cs));
+        glm::mat4 cubeRotation = glm::rotate(glm::mat4(1.0f), glm::radians(cubeAngle * (i+1)), glm::vec3(0.0f, 1.0f, 0.0f));
+
+
+        glm::mat4 f = translation * rotationX * rotationY * rotationZ * cubeRotation * cubeTranslation * cubePosition * cubeSize;
+        glLoadMatrixf(glm::value_ptr(f));
+        drawCube(1.0);
+    }
+
+    glm::mat4 planeScaling = glm::scale(glm::mat4(1.0f), glm::vec3(5,5,5));
+
+    glm::mat4 f = translation * rotationX * rotationY * rotationZ * planeScaling;
     glLoadMatrixf(glm::value_ptr(f));
 
-    // Pass a triangle (object coordinates: the triangle is centered around the origin):
-    glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(95.0f/100, 31.4f/100, 13.3f/100);
-    glVertex3f(5.0f, -5.0f, 5.0f);
-    glVertex3f(-5.0f, -5.0f, 5.0f);
-    glVertex3f(5.0f, 5.0f, 5.0f);
-    glVertex3f(-5.0f, 5.0f, 5.0f);
-    glEnd();
+    drawPlane(5.0);
 
-    glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(49.8f/100, 72.9f/100, 0.0f/100);
-    glVertex3f(5.0f, -5.0f, -5.0f);
-    glVertex3f(-5.0f, -5.0f, -5.0f);
-    glVertex3f(5.0f, 5.0f, -5.0f);
-    glVertex3f(-5.0f, 5.0f, -5.0f);
-    glEnd();
-
-    glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(0.0f/100, 64.3f/100, 93.7f/100);
-    glVertex3f(5.0f, -5.0f, -5.0f);
-    glVertex3f(5.0f, 5.0f, -5.0f);
-    glVertex3f(5.0f, -5.0f, 5.0f);
-    glVertex3f(5.0f, 5.0f, 5.0f);
-    glEnd();
-
-    glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(100.0f/100, 72.5f/100, 0.0f/100);
-    glVertex3f(-5.0f, -5.0f, -5.0f);
-    glVertex3f(-5.0f, 5.0f, -5.0f);
-    glVertex3f(-5.0f, -5.0f, 5.0f);
-    glVertex3f(-5.0f, 5.0f, 5.0f);
-    glEnd();
-
-    glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(28.6f/100, 28.6f/100, 28.6f/100);
-    glVertex3f(-5.0f, -5.0f, -5.0f);
-    glVertex3f(5.0f, -5.0f, -5.0f);
-    glVertex3f(-5.0f, -5.0f, 5.0f);
-    glVertex3f(5.0f, -5.0f, 5.0f);
-    glEnd();
-
-
-    glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(72.3f/100, 0.0f/100, 0.0f/100);
-    glVertex3f(-5.0f, 5.0f, -5.0f);
-    glVertex3f(5.0f, 5.0f, -5.0f);
-    glVertex3f(-5.0f, 5.0f, 5.0f);
-    glVertex3f(5.0f, 5.0f, 5.0f);
-    glEnd();
     // Swap this context's buffer:
     glutPostWindowRedisplay(windowId);
     glutSwapBuffers();
@@ -167,10 +288,32 @@ void specialCallback(int key, int mouseX, int mouseY) {
         case GLUT_KEY_RIGHT:
             angleX -= speed;
             break;
+        default:
+            break;
     }
 
     // Force rendering refresh:
     glutPostWindowRedisplay(windowId);
+}
+
+void keyboardCallback(unsigned char c , int x, int y){
+    printf("%c pressed\n", c);
+    switch(c){
+        case 'w':
+        case 'W':
+            wireFrame = !wireFrame;
+            break;
+        case 'd':
+        case 'D':
+            angleY += 2.0f;
+            break;
+        case 'a':
+        case 'A':
+            angleY -= 2.0f;
+            break;
+        default:
+            break;
+    }
 }
 
 
@@ -209,6 +352,7 @@ int main(int argc, char *argv[]) {
     glutDisplayFunc(displayCallback);
     glutReshapeFunc(reshapeCallback);
     glutSpecialFunc(specialCallback);
+    glutKeyboardFunc(keyboardCallback);
 
     // Check OpenGL version:
     std::cout << "OpenGL context" << std::endl;
