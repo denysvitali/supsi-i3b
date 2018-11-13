@@ -11,7 +11,7 @@ public class MyOutputIterator {
 	private ListFromFile lff;
 	private ArrayList<OutputStream> os = new ArrayList<>();
 	private HashMap<Character, Integer> statHM = new HashMap<>();
-	private MyOutputDecorator decorator = null;
+	private MyOutputDecorator decorator = (a)-> a;
 	private boolean alreadyIterated = false;
 
 	public MyOutputIterator(String inputFilename, MyIteratorDirection dir) throws IOException {
@@ -51,10 +51,7 @@ public class MyOutputIterator {
 
 	public void iterate() throws IOException {
 		while(iterator.hasMoreElements()){
-			String output = iterator.nextElement();
-			if(decorator != null){
-				output = decorator.decorate(output);
-			}
+			String output = decorator.decorate(iterator.nextElement());
 			if(statHM.keySet().size() > 0){
 				for(byte c : output.getBytes()){
 					if(statHM.containsKey((char) c)){
