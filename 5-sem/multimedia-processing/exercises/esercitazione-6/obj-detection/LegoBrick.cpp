@@ -3,6 +3,7 @@
 //
 
 #include "LegoBrick.h"
+#include "color.h"
 
 LegoBrick::LegoBrick(cv::RotatedRect& rect) : LegoBrick{rect, nullptr} {}
 
@@ -58,6 +59,7 @@ void LegoBrick::draw(cv::Mat &image) {
 
     cv::Scalar mean = cv::mean(image, mask);
 
+
     for (int i = 0; i < 4; i++) {
         cv::line(image, pts[i], pts[(i + 1) % 4], mean, 2);
     }
@@ -66,14 +68,15 @@ void LegoBrick::draw(cv::Mat &image) {
 
 
     std::stringstream text{};
-    text << this->getWidth() << "x" << this->getHeight();
+    text << this->getWidth() << "x" << this->getHeight() << " - " << Color(mean).label();
 
     cv::String cvStr{text.str()};
     int* baseline = new int{};
-    auto size = cv::getTextSize(text.str(), cv::FONT_HERSHEY_PLAIN, 2.0, 1, baseline);
+    double textSize = 1.0;
+    auto size = cv::getTextSize(text.str(), cv::FONT_HERSHEY_PLAIN, textSize, 1, baseline);
     cv::Point textCenter = cv::Point{static_cast<int>(getCenter().x - size.width / 2),
                                      static_cast<int>(getCenter().y + size.height / 2)};
-    cv::putText(image, cvStr, textCenter, cv::FONT_HERSHEY_PLAIN, 2.0, cv::Scalar(0, 0, 255.0));
+    cv::putText(image, cvStr, textCenter, cv::FONT_HERSHEY_PLAIN, textSize, cv::Scalar(0, 0, 255.0));
 }
 
 cv::Point2f LegoBrick::getCenter() {
