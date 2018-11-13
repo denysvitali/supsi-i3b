@@ -13,3 +13,6 @@
 [submodule "5-sem/compint/ifunny"]
 	path = 5-sem/compint/ifunny
 	url = https://git.ded1.denv.it/husky/ifunny
+[submodule "5-sem/graphics/riassunti/ria-1"]
+	path = 5-sem/graphics/riassunti/ria-1
+	url = ssh://git@git.ded1.denv.it:4000/I3B/graphis-ria1.git
