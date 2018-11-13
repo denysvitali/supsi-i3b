@@ -13,18 +13,15 @@ int main() {
     }
 
     cv::Mat greyMat, outputMat, erodedMat;
+    cv::imshow("Original Image", image);
 
     cv::cvtColor(image, greyMat, CV_BGR2GRAY);
-    cv::imshow("Gray Image", greyMat);
-
     cv::adaptiveThreshold(greyMat, outputMat, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C,
             cv::THRESH_BINARY, 11, 2);
-    cv::imshow("Output Mat", outputMat);
 
     cv::Mat kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(40, 40));
 
     cv::morphologyEx(outputMat, erodedMat, cv::MORPH_OPEN, kernel);
-    cv::imshow("Eroded Mat", erodedMat);
     vector<vector<cv::Point>> contours{};
     vector<cv::RotatedRect> rectangles{};
     cv::findContours(erodedMat, contours, cv::RETR_LIST, cv::CHAIN_APPROX_SIMPLE);
@@ -63,6 +60,7 @@ int main() {
     }
 
     auto* referenceBrick = new LegoBrick{*smallestRectangle};
+    referenceBrick->setSize(2, 1);
     vector<LegoBrick*> bricks{};
 
     for(auto& rect : rectangles){

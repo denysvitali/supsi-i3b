@@ -17,6 +17,7 @@ public:
     int getHeight();
     void setSize(int w, int h);
     void draw(cv::Mat& image);
+    cv::Point2f getCenter();
 
 private:
     cv::RotatedRect m_rect;
@@ -24,6 +25,7 @@ private:
     int m_width;
     int m_height;
     cv::Scalar m_color{0.0, 255.0, 0};
+    float m_bl = -1.0;
 };
 
 #endif //OBJ_DETECTION_LEGOBRICK_H
