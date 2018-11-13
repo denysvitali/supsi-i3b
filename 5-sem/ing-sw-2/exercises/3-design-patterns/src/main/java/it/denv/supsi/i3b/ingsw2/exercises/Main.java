@@ -1,5 +1,6 @@
 package it.denv.supsi.i3b.ingsw2.exercises;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class Main {
@@ -8,10 +9,19 @@ public class Main {
         ListFromFile lff = new ListFromFile("test.txt");
         MyList<String> list = lff.getList();
 
-        MyIterator<String> myIterator = list.getBackwardIterator();
-        while(myIterator.hasMoreElements()){
-            System.out.println(myIterator.nextElement());
-        }
+        MyOutputIterator myOutputIterator =
+                new MyOutputIterator("test.txt",
+                        MyIteratorDirection.BACKWARD);
+        myOutputIterator.setDecorator(String::toUpperCase);
+
+        FileOutputStream fos = new FileOutputStream("/tmp/test2.txt");
+        myOutputIterator.addOutputStream(fos);
+        myOutputIterator.addOutputStream(System.out);
+        myOutputIterator.addStatCounter('A');
+        myOutputIterator.addStatCounter('B');
+        myOutputIterator.iterate();
+
+        System.out.println("As: " + myOutputIterator.getStatHM().get('A'));
 
     }
 }

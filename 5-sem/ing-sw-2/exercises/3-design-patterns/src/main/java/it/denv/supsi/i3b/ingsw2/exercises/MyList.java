@@ -1,5 +1,6 @@
 package it.denv.supsi.i3b.ingsw2.exercises;
 
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,6 @@ public class MyList<T> {
 	public void addElement(T element){
 		myList.add(element);
 	}
-
 	public int length() {
 		return myList.size();
 	}
