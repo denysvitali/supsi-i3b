@@ -1,0 +1,2 @@
+curl 'https://api.color.pizza/v1/' -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:65.0) Gecko/20100101 Firefox/65.0' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' -H 'Accept-Language: en-US,en;q=0.5' --compressed -H 'Referer: https://github.com/meodai/color-names' -H 'DNT: 1' -H 'Connection: keep-alive' -H 'Upgrade-Insecure-Requests: 1' -H 'Pragma: no-cache' -H 'Cache-Control: no-cache' > colors.json
+cat colors.json | jq '.[][] | "Color(\(.rgb.r), \(.rgb.g), \(.rgb.b), \"\(.name)\"),"' -r > all_colors.h

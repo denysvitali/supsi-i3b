@@ -75,16 +75,6 @@ void Color::recognize_color() {
 
 std::vector<Color> Color::colors() {
     return vector<Color>{
-        Color(255, 255, 255, "White"),
-        Color(255, 0, 0, "Red"),
-        Color(50, 0, 0, "Dark Red"),
-        Color(199,55,33, "Light Red"),
-        Color(0, 255, 0, "Green"),
-        Color(18,74,33, "Dark Green"),
-        Color(0, 0, 255, "Blue"),
-        Color(255, 102, 0, "Orange"),
-        Color(102, 0, 255, "Purple"),
-        Color(255, 255, 0, "Yellow"),
-        Color(0, 0, 0, "Black"),
+#include "all_colors.h"
     };
 }
