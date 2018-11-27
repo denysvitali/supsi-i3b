@@ -19,3 +19,6 @@
 [submodule "5-sem/os/bthread"]
 	path = 5-sem/os/bthread
 	url = https://git.ded1.denv.it/shrug/bthread
+[submodule "5-sem/graphics/tuna"]
+	path = 5-sem/graphics/tuna
+	url = https://git.ded1.denv.it/shrug/tuna
