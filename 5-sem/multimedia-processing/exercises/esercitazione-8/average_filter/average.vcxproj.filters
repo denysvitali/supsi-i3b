@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src/main.cpp" />
+    <ClCompile Include="src/utilities/profiling.c">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src/average_cpu.c">
+      <Filter>cpu</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src/utilities/stb_image.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src/utilities/stb_image_write.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src/average_cpu.h">
+      <Filter>cpu</Filter>
+    </ClInclude>
+    <ClInclude Include="src/average_gpu.h">
+      <Filter>gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="src/utilities/commons.h" />
+    <ClInclude Include="src/utilities/profiling.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="utils">
+      <UniqueIdentifier>{66cbdefd-6cd4-4994-aca0-2f6129e54380}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpu">
+      <UniqueIdentifier>{c9a33837-1cca-45bd-b43a-05f9109b2884}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gpu">
+      <UniqueIdentifier>{cbe4ca9b-4dac-4eb3-ac35-e458b52aa58a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="src/average_gpu.cu">
+      <Filter>gpu</Filter>
+    </CudaCompile>
+  </ItemGroup>
+</Project>
