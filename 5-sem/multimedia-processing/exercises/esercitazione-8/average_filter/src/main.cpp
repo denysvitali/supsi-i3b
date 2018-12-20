@@ -12,7 +12,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-#define BENCHMARK_CPU_ENABLED 0
+#define BENCHMARK_CPU_ENABLED 1
 #define BENCHMARK_GPU_ENABLED 1
 
 static void waitForEnterPressed()
