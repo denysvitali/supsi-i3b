@@ -1,0 +1,8 @@
+1.      gst-launch-1.0 audiotestsrc wave=sine freq=400 ! autoaudiosink
+2.      gst-launch-1.0 videotestsrc pattern=0 ! autovideosink
+3.  a)  gst-launch-1.0 playbin uri=https://download.blender.org/peach/bigbuckbunny_movies/big_buck_bunny_1080p_h264.mov
+    b)  gst-launch-1.0 filesrc location=/home/dvitali/Downloads/BigBuckBunny_320x180.mp4 ! decodebin ! autovideosink
+4.      gst-launch-1.0 filesrc location=/home/dvitali/Downloads/BigBuckBunny_320x180.mp4 ! decodebin ! x264enc ! filesink location=/tmp/out.mp4
+5.      Server: gst-launch-1.0 -v \                                                                                                                              -2-
+        filesrc location=/home/dvitali/Downloads/BigBuckBunny_320x180.mp4 ! decodebin ! x264enc ! rtph264pay ! udpsink host=127.0.0.1 port=1600
+        Client: gst-launch-1.0 udpsrc address=127.0.0.1 port=1600 caps="application/x-rtp, media=video, clock-rate=90000, encoding-name=H264, payload=96" ! rtph264depay ! avdec_h264 ! autovideosink
